@@ -19,8 +19,8 @@ $$PV = \sum_{t=1}^{n} \frac{FCF_t}{(1+WACC)^t} + \frac{TerminalValue}{(1+WACC)^n
 2. **计算加权平均资本成本 (WACC)**：
    - 公式：$WACC = \frac{E}{V} \times Re + \frac{D}{V} \times Rd \times (1 - t)$
    - 其中，**权益成本 ($Re$)** 采用 CAPM 模型：$Re = Rf + \beta \times (Rm - Rf)$。
-   - **$Rf$**：无风险利率（通常用 10 年期国债收益率）。
-   - **$\beta$**：反映公司股价相对于大盘的风险。
+   - **$Rf$**：无风险利率（通常用 10 年期国债收益率，如中国 10Y 国债）。
+   - **$\beta$**：反映公司股价相对于大盘（如沪深300）的风险。
    - **$Rm - Rf$**：股权风险溢价 (ERP)。
 
 3. **计算终值 (Terminal Value, TV)**：
