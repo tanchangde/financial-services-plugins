@@ -283,7 +283,7 @@ def main():
         output['inconsistencies'] = inconsistencies
 
         if inconsistencies:
-            print("\n=== 检测到潜在不一致 ===\n", file=sys.stderr)
+            print("\n=== 检测到潜在不一致性 ===\n", file=sys.stderr)
             for inc in inconsistencies:
                 print(f"类别：{inc['category'].upper()}", file=sys.stderr)
                 print(f"  预期：{inc['expected']['value']}（幻灯片：{inc['expected']['slides']}，数量：{inc['expected']['count']}）", file=sys.stderr)
