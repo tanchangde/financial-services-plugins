@@ -1,0 +1,8 @@
+# DCF模型构建器 - Python依赖
+
+# Excel文件处理
+openpyxl>=3.0.0
+
+# 市场数据获取
+yfinance>=0.2.0
+requests>=2.28.0
