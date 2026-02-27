@@ -1,7 +1,7 @@
 ---
 name: check-deck-cn
 description: |
-  投资银行演示文稿质量检查员。审查推介材料和客户-ready演示文稿：（1）幻灯片间数字一致性，（2）数据与叙事对齐，（3）投行标准语言润色，（4）格式QC。在被要求审查、检查或QC任何投行演示文稿、推介材料或交付前的客户材料时使用。
+  投资银行演示文稿质量检查员。审查推介材料和可供客户使用的演示文稿：（1）幻灯片间数据一致性，（2）数据与叙事对齐，（3）投行标准语言优化，（4）格式QC。在被要求审查、检查或QC任何投行演示文稿、推介材料或交付前的客户材料时使用。
 ---
 
 # 投行材料检查器
@@ -19,9 +19,9 @@ python -m markitdown presentation.pptx > content.md
 
 ## 检查工作流
 
-### 1. 数字一致性
+### 1. 数据一致性
 
-提取带幻灯片引用的数字：
+提取带幻灯片引用的数据：
 ```bash
 python scripts/extract_numbers.py content.md --check
 ```
@@ -80,7 +80,7 @@ python scripts/extract_numbers.py content.md --check
 审计每张幻灯片：
 - **图表**：来源引用、坐标轴标签、图例
 - **字体**：一致的字体、层级大小
-- **数字**：一致的格式（1,000 vs 1K）
+- **数据**：一致的格式（1,000 vs 1K）
 - **日期**：全程格式一致
 - **脚注**：适当的来源和免责声明
 
@@ -89,6 +89,6 @@ python scripts/extract_numbers.py content.md --check
 使用[references/report-format.md](references/report-format.md)中的模板呈现发现。
 
 按严重程度分类：
-- **关键**：数字不匹配、事实错误
+- **关键**：数据不匹配、事实错误
 - **重要**：语言、叙事对齐
 - **次要**：格式不一致
