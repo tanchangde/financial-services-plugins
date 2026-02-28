@@ -1,6 +1,9 @@
-# 投资组合再平衡
-
+---
+name: portfolio-rebalance-cn
 description: 分析投资组合配置偏离并生成跨账户的再平衡交易建议。考虑税务影响、交易成本和洗售交易（wash sale）规则。触发词："rebalance"（再平衡）、"portfolio drift"（投资组合偏离）、"allocation check"（配置检查）、"rebalancing trades"（再平衡交易）或 "my portfolio is out of balance"（我的投资组合失衡）。
+---
+
+# 投资组合再平衡
 
 ## 工作流程
 

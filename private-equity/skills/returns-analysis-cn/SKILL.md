@@ -1,6 +1,9 @@
-# 回报分析（Returns Analysis）
+---
+name: returns-analysis-cn
+description: 为 PE（私募股权）交易评估构建快速 IRR（内部收益率）/MOIC（投资资本倍数）敏感性表。对入场倍数、杠杆、退出倍数、增长和持有期情景下的回报进行建模。适用于评估交易规模、压力测试假设或准备 IC（投资委员会）回报展示。触发词："returns analysis"（回报分析）、"IRR sensitivity"（IRR 敏感性）、"MOIC table"（MOIC 表格）、"what's the return at"（回报率是多少）、"model the returns"（模拟回报）或 "back of the envelope"（初步估算）。
+---
 
-description: 为 PE（私募股权）交易评估构建快速 IRR（内部收益率）/MOIC（投资资本倍数）敏感性表。建模 entry multiple（入场倍数）、leverage（杠杆）、exit multiple（退出倍数）、growth（增长）和 hold period（持有期）情景下的回报。适用于评估交易规模、压力测试假设或准备 IC（投资委员会）回报展示。触发词："returns analysis"、"IRR sensitivity"、"MOIC table"、"what's the return at"、"model the returns"或"back of the envelope"。
+# 回报分析（Returns Analysis）
 
 ## 工作流程
 
@@ -109,8 +112,8 @@ description: 为 PE（私募股权）交易评估构建快速 IRR（内部收益
 
 ## 重要提示
 
-- 始终显示扣除费用/carry（carry 指附带权益）前后的回报（如适用）
-- 管理层 rollover（ rollover 指继续持股）和 co-invest（共同投资）会改变股权投入 — 询问是否相关
-- 股息 recapitalization（股息资本重组）或期间分配会显著影响 IRR — 如有计划则包括
+- 始终显示扣除费用和附带权益前后的回报（如适用）
+- 管理层继续持股和共同投资会改变股权投入 — 询问是否相关
+- 股息资本重组或期间分配会显著影响 IRR — 如有计划则包括
 - 不要忘记交易成本（通常为企业价值的 2-4%）— 它们会降低首日股权价值
-- 税务考虑（资产 vs. 股权交易、338(h)(10) 选举）可能会实质性影响税后回报
+- 税务考虑（资产 vs. 股权交易、338(h)(10) 税务选择）可能会实质性影响税后回报

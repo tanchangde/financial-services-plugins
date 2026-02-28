@@ -1,6 +1,9 @@
-# 投资委员会备忘录（Investment Committee Memo）
+---
+name: ic-memo-cn
+description: 为 PE（私募股权）交易审批起草结构化的投资委员会（IC）备忘录。将尽职调查发现、财务分析和交易条款综合成专业的 IC 就绪文档。适用于准备投资委员会会议、撰写交易文件或创建正式建议。触发词："write IC memo"（撰写 IC 备忘录）、"investment committee memo"（投资委员会备忘录）、"deal write-up"（交易文件）、"prepare IC materials"（准备 IC 材料）或 "recommendation memo"（建议备忘录）。
+---
 
-description: 为 PE（私募股权）交易审批起草结构化的投资委员会（IC）备忘录。将尽职调查发现、财务分析和交易条款综合成专业的 IC 就绪文档。适用于准备投资委员会会议、撰写交易文件或创建正式建议。触发词："write IC memo"、"investment committee memo"、"deal write-up"、"prepare IC materials"或"recommendation memo"。
+# 投资委员会备忘录（Investment Committee Memo）
 
 ## 工作流程
 
@@ -23,12 +26,12 @@ description: 为 PE（私募股权）交易审批起草结构化的投资委员�
 
 **I. 执行摘要**（1 页）
 - 公司描述、交易逻辑、关键条款
-- 建议和 headline returns（ headline returns 指主要回报指标）
-- top 3 风险和缓解措施
+- 建议和主要回报指标
+- 前 3 项风险和缓解措施
 
 **II. 公司概况**（1-2 页）
 - 业务描述、产品/服务
-- 客户基础和上市策略（go-to-market）
+- 客户基础和上市策略
 - 竞争定位
 - 管理团队
 
@@ -46,12 +49,12 @@ description: 为 PE（私募股权）交易审批起草结构化的投资委员�
 
 **V. 投资逻辑**（1 页）
 - 为何这是一项有吸引力的投资（3-5 个支柱）
-- 价值创造杠杆（有机增长、利润率扩张、M&A（并购）、倍数扩张）
+- 价值创造杠杆（有机增长、利润率扩张、并购、倍数扩张）
 - 100 天优先事项
 
 **VI. 交易条款与结构**（1 页）
 - 企业价值和隐含倍数
-- 资金来源与使用（Sources & Uses）
+- 资金来源与使用
 - 资本结构/杠杆
 - 关键法律条款
 

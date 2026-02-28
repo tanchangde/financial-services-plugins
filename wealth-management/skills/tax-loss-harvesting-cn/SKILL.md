@@ -1,6 +1,9 @@
-# 税收损失收割
+---
+name: tax-loss-harvesting-cn
+description: 识别应税账户中的税收损失收割机会。查找具有未实现损失的头寸，建议替代证券，并跟踪洗售交易（wash sale）窗口。触发词："tax-loss harvesting"（税收损失收割）、"TLH"（税收损失收割）、"harvest losses"（收割损失）、"tax losses"（税务损失）、"unrealized losses"（未实现损失）或 "year-end tax planning"（年末税务规划）。
+---
 
-description: 识别应税账户中的税收损失收割机会。查找具有未实现损失的头寸，建议替代证券，并跟踪洗售交易（wash sale）窗口。触发词："tax-loss harvesting"（税收损失收割）、"TLH"、"harvest losses"（收割损失）、"tax losses"（税务损失）、"unrealized losses"（未实现损失）或 "year-end tax planning"（年末税务规划）。
+# 税收损失收割
 
 ## 工作流程
 

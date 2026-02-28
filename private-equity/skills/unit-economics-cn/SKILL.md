@@ -1,6 +1,9 @@
-# 单体经济分析（Unit Economics Analysis）
+---
+name: unit-economics-cn
+description: 分析 PE（私募股权）目标公司的单体经济 — ARR（年度经常性收入）队列、LTV/CAC（客户生命周期价值/客户获取成本）、净留存率、回收期、收入质量和利润瀑布。对软件/SaaS、经常性收入和订阅业务至关重要。适用于评估收入质量、构建队列分析或评估客户经济学。触发词："unit economics"（单体经济）、"cohort analysis"（队列分析）、"ARR analysis"（ARR 分析）、"LTV CAC"（LTV/CAC）、"net retention"（净留存率）、"revenue quality"（收入质量）或 "customer economics"（客户经济学）。
+---
 
-description: 分析 PE（私募股权）目标公司的单体经济 — ARR（年度经常性收入）队列、LTV/CAC（客户生命周期价值/客户获取成本）、净留存率、回收期、收入质量和利润瀑布。对软件/SaaS、经常性收入和订阅业务至关重要。适用于评估收入质量、构建队列分析或评估客户经济学。触发词："unit economics"、"cohort analysis"、"ARR analysis"、"LTV CAC"、"net retention"、"revenue quality"或"customer economics"。
+# 单体经济分析（Unit Economics Analysis）
 
 ## 工作流程
 
@@ -16,8 +19,8 @@ description: 分析 PE（私募股权）目标公司的单体经济 — ARR（�
 
 #### ARR/收入质量
 - **ARR 桥接**：期初 ARR → 新增 → 扩张 → 收缩 → 流失 → 期末 ARR
-- **按队列的 ARR**：vintage analysis（年份分析）— 每个年度队列如何留存和增长？
-- **收入集中度**：top 10/20/50 客户占总收入的百分比
+- **按队列的 ARR**：同期群分析 — 每个年度队列如何留存和增长？
+- **收入集中度**：前 10/20/50 名客户占总收入的百分比
 - **按类型划分的收入**：经常性 vs. 非经常性 vs. 专业服务
 - **合同结构**：ACV（年度合同价值）分布、多年合同百分比、自动续约百分比
 
@@ -26,7 +29,7 @@ description: 分析 PE（私募股权）目标公司的单体经济 — ARR（�
 - **LTV（客户生命周期价值）**：（ARPU（每用户平均收入）× 毛利率）/ 流失率
 - **LTV:CAC 比率**：健康业务目标>3x
 - **CAC 回收期**：回收获取成本所需的月数
-- **blended vs. segmented（综合 vs. 细分）**：按客户细分（企业 vs. SMB（中小企业）vs. 中端市场）细分
+- **综合 vs. 细分**：按客户细分（企业 vs. 中小企业 vs. 中端市场）细分
 
 #### 留存与扩张
 - **总留存率**：保留的期初 ARR 百分比（不包括扩张）
@@ -49,7 +52,7 @@ description: 分析 PE（私募股权）目标公司的单体经济 — ARR（�
 
 #### 利润瀑布
 - 收入 → 毛利润 → 贡献利润 → EBITDA（息税折旧摊销前利润）
-- 完全加载的单体经济：获取、服务和留存客户的成本是多少？
+- 完全成本核算的单体经济：获取、服务和留存客户的成本是多少？
 - 按收入流划分的毛利率（订阅 vs. 服务 vs. 其他）
 
 ### 步骤 3：基准对比

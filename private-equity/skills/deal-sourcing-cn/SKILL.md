@@ -1,6 +1,9 @@
-# 项目挖掘（Deal Sourcing）
+---
+name: deal-sourcing-cn
+description: PE（私募股权）项目挖掘工作流程 — 发现目标公司、检查 CRM（客户关系管理）中的现有关系，并起草个性化的创始人外联邮件。适用于挖掘新项目、在某个行业主动寻找潜在目标或联系创始人。触发词："find companies"（寻找公司）、"source deals"（挖掘交易）、"draft founder email"（起草创始人邮件）、"check if we've seen this company"（检查是否见过这家公司）或 "outreach to founder"（联系创始人）。
+---
 
-description: PE（私募股权）项目挖掘工作流程 — 发现目标公司、检查 CRM（客户关系管理）中的现有关系，并起草个性化的创始人外联邮件。适用于挖掘新项目、在某个行业 prospecting（ prospecting 指主动寻找潜在客户/目标）或联系创始人。触发词："find companies"、"source deals"、"draft founder email"、"check if we've seen this company"或"outreach to founder"。
+# 项目挖掘（Deal Sourcing）
 
 ## 工作流程
 

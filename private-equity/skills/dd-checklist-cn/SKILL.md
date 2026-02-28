@@ -1,6 +1,9 @@
-# 尽职调查清单（Due Diligence Checklist）
+---
+name: dd-checklist-cn
+description: 生成并跟踪全面的尽职调查（DD）清单，根据目标公司的行业、交易类型和复杂程度进行定制。涵盖所有主要工作流，包括请求清单、状态跟踪和红旗事项升级。适用于启动尽职调查、组织虚拟数据室（VDR）审查或跟踪未完成事项。触发词："dd checklist"（尽职调查清单）、"due diligence tracker"（尽职调查跟踪器）、"diligence request list"（尽职调查请求清单）、"what do we still need"（我们还需要什么）或 "data room review"（数据室审查）。
+---
 
-description: 生成并跟踪全面的尽职调查（DD）清单，根据目标公司的行业、交易类型和复杂程度进行定制。涵盖所有主要工作流，包括请求清单、状态跟踪和红旗事项升级。适用于启动尽职调查、组织虚拟数据室（VDR）审查或跟踪未完成事项。触发词："dd checklist"、"due diligence tracker"、"diligence request list"、"what do we still need"或"data room review"。
+# 尽职调查清单（Due Diligence Checklist）
 
 ## 工作流程
 
@@ -19,12 +22,12 @@ description: 生成并跟踪全面的尽职调查（DD）清单，根据目标�
 
 **财务尽职调查**
 - 盈利质量分析（QoE）— 收入和 EBITDA 调整
-- 营运资本分析 — normalized（正常化）vs. actual（实际）
+- 营运资本分析 — 正常化 vs. 实际
 - 债务及类债务项目
 - 资本支出（维护性 vs. 增长性）
 - 税务结构和潜在风险
 - 审计历史和会计政策
-- 备考调整（run-rate、协同效应）
+- 备考调整（常态化、协同效应）
 
 **商业尽职调查**
 - 市场规模和增长（TAM/SAM/SOM — 总可服务市场/可服务市场/可获得市场）

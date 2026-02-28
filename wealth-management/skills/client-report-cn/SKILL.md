@@ -1,6 +1,9 @@
-# 客户报告
-
+---
+name: client-report-cn
 description: 生成面向客户的专业业绩报告，包含投资组合回报、资产配置明细和市场评论。适用于季度或年度分发。触发词："client report"（客户报告）、"performance report"（业绩报告）、"quarterly report for [client]"（[客户] 季度报告）、"generate reports"（生成报告）或 "client statement"（客户对账单）。
+---
+
+# 客户报告
 
 ## 工作流程
 

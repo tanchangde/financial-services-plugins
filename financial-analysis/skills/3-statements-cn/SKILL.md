@@ -1,6 +1,6 @@
 ---
 name: 3-statements-cn
-description: 完成、填充和三表财务模型模板（损益表、资产负债表、现金流量表）。用于填写模型模板、完成现有模型框架、用数据填充财务模型、完成部分填充的IS/BS/CF框架，或在现有模板结构内链接整合财务报表。触发词包括填写、完成或填充三表模型模板的请求。
+description: 完成、填充和三表财务模型模板（损益表、资产负债表、现金流量表）。用于填写模型模板、完成现有模型框架、用数据填充财务模型、完成部分填充的IS/BS/CF框架，或在现有模板结构内链接整合财务报表。触发词："fill 3-statement model"（填写三表模型）、"complete model template"（完成模型模板）、"populate financial model"（填充财务模型）、"fill in IS/BS/CF"（填写损益表/资产负债表/现金流量表）或 "link financial statements"（链接财务报表）。
 ---
 
 # 三表财务模型模板完成

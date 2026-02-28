@@ -1,6 +1,9 @@
-# Teaser
+---
+name: teaser-cn
+description: 为卖方并购流程起草匿名的一页公司 teaser。制作引人注目的摘要，同时隐匿公司身份，旨在在 NDA（保密协议）签署之前试探买方兴趣。用于准备卖方营销材料。触发词："teaser"（项目简介）、"blind teaser"（匿名 teaser）、"anonymous profile"（匿名简介）、"one-pager for process"（流程一页纸）或 "draft teaser for sell-side"（卖方 teaser 草稿）。
+---
 
-description: 为卖方并购流程起草匿名的一页公司 teaser。制作引人注目的摘要，同时隐匿公司身份，旨在在 NDA（保密协议）签署之前试探买方兴趣。触发词包括"teaser"、"blind teaser"、"anonymous profile"、"one-pager for process"或"draft teaser for sell-side"。
+# Teaser
 
 ## 工作流程
 

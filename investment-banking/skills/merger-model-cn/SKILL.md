@@ -1,6 +1,9 @@
-# 并购模型
+---
+name: merger-model-cn
+description: 为并购交易建立增厚/摊薄（accretion/dilution）分析。建模分析备考 EPS 影响、协同效应敏感性和购买价格分配。用于评估潜在收购、为路演准备并购后果分析或就交易条款提供顾问意见。触发词："merger model"（并购模型）、"accretion dilution"（增厚/摊薄）、"M&A model"（并购模型）、"pro forma EPS"（备考 EPS）、"merger consequences"（并购后果）或 "deal impact analysis"（交易影响分析）。
+---
 
-description: 为并购交易建立增厚/摊薄（accretion/dilution）分析。建模分析备考 EPS 影响、协同效应敏感性和购买价格分配。用于评估潜在收购、为路演准备并购后果分析或就交易条款提供顾问意见。触发词包括"并购模型"、"accretion dilution"、"M&A 模型"、"备考 EPS"、"并购后果"或"交易影响分析"。
+# 并购模型
 
 ## 工作流程
 
