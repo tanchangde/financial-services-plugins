@@ -1,6 +1,9 @@
-# 财务规划
+---
+name: financial-plan-cn
+description: 构建或更新全面的财务规划，涵盖退休预测、教育资金、遗产规划和现金流分析。用于新客户入驻、年度规划审查或情景建模。触发词："financial plan"（财务规划）、"retirement plan"（退休规划）、"can I retire"（我能退休吗）、"education funding"（教育资金）、"estate plan"（遗产规划）、"cash flow analysis"（现金流分析）或 "plan update"（规划更新）。
+---
 
-description: 构建或更新全面的财务规划，涵盖退休预测、教育资金、遗产规划和现金流分析。用于新客户入职、年度规划审查或情景建模。触发词："financial plan"（财务规划）、"retirement plan"（退休规划）、"can I retire"（我能退休吗）、"education funding"（教育资金）、"estate plan"（遗产规划）、"cash flow analysis"（现金流分析）或 "plan update"（规划更新）。
+# 财务规划
 
 ## 工作流程
 
@@ -42,12 +45,12 @@ description: 构建或更新全面的财务规划，涵盖退休预测、教育�
 - 社会保障金开始领取年龄和福利
 - 养老金收入（如有）
 - 投资组合提取率和顺序
-- 最低提取额（RMDs）
+- 强制最低提取额（RMDs）
 
 **关键输出：**
 - 退休时的预计投资组合价值
 - 可持续提取率
-- 资金耗尽的概率（目标 >85%）
+- 资金不耗尽的概率（目标 >85%）
 - "如果"情景：提前退休、市场低迷、更高支出
 
 ### 步骤 4：特定目标分析

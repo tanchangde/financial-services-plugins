@@ -1,6 +1,9 @@
-# 客户审查准备
+---
+name: client-review-cn
+description: 为客户回顾会议做准备，包含投资组合业绩摘要、资产配置分析、讨论要点和行动项目。将账户数据汇总为简洁的会议就绪格式。用于季度回顾、年度检查或临时客户会议。触发词："client review"（客户回顾）、"meeting prep for [client]"（[客户] 会议准备）、"quarterly review"（季度回顾）、"prep for [client name]"（为 [客户姓名] 准备）或 "client meeting"（客户会议）。
+---
 
-description: 为客户审查会议做准备，包含投资组合业绩摘要、资产配置分析、讨论要点和行动项目。将账户数据汇总为简洁的会议就绪格式。用于季度审查、年度检查或临时客户会议。触发词："client review"（客户审查）、"meeting prep for [client]"（[客户] 会议准备）、"quarterly review"（季度审查）、"prep for [client name]"（为 [客户姓名] 准备）或 "client meeting"（客户会议）。
+# 客户回顾会议准备
 
 ## 工作流程
 

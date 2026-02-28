@@ -1,6 +1,9 @@
-# 流程函件
+---
+name: process-letter-cn
+description: 为卖方并购流程起草流程函件和投标指引。涵盖初始兴趣指示（IOI）指示、最终投标程序和管理层会议后勤。用于准备卖方并购流程中的沟通材料。触发词："process letter"（流程函件）、"bid instructions"（投标指引）、"IOI letter"（IOI 函件）、"bid procedures"（投标程序）、"final round letter"（最终轮函件）或 "management meeting invite"（管理层会议邀请）。
+---
 
-description: 为卖方并购流程起草流程函件和投标指引。涵盖初始兴趣指示（IOI）指示、最终投标程序和管理层会议后勤。触发词包括"流程函件"、"投标指引"、"IOI 函件"、"投标程序"、"最终轮函件"或"管理层会议邀请"。
+# 流程函件
 
 ## 工作流程
 

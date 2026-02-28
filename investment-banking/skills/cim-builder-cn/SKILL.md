@@ -1,6 +1,9 @@
-# CIM 编写
+---
+name: cim-builder-cn
+description: 为卖方并购流程组织和起草保密信息备忘录（CIM）。将公司信息组织成具有统一格式和叙述流程的专业、投资者就绪文件。用于准备卖方材料、起草 CIM 或组织公司数据进行出售流程。触发词："CIM"（保密信息备忘录）、"confidential information memorandum"（保密信息备忘录）、"offering memorandum"（发售备忘录）、"info memo"（信息备忘录）、"draft CIM"（起草 CIM）或 "sell-side materials"（卖方材料）。
+---
 
-description: 为卖方并购流程组织和起草保密信息备忘录（CIM）。将公司信息组织成具有统一格式和叙述流程的专业、投资者就绪文件。用于准备卖方材料、起草 CIM 或组织公司数据进行出售流程。触发词包括"CIM"、"保密信息备忘录"、"发售备忘录"、"信息备忘录"、"起草 CIM"或"卖方材料"。
+# CIM 编写
 
 ## 工作流程
 

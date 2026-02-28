@@ -1,6 +1,9 @@
-# 尽职调查会议准备（Diligence Meeting Prep）
+---
+name: dd-meeting-prep-cn
+description: 准备尽职调查会议 — 管理层演示、专家网络电话、客户参考访谈和顾问会议。生成针对性问题清单、参考基准和需要深入询问的红旗事项。适用于任何尽职调查会议或电话会议前。触发词："prep for management meeting"（管理层会议准备）、"diligence call prep"（尽职调查电话准备）、"expert call questions"（专家电话问题）、"customer reference questions"（客户参考访谈问题）或 "meeting prep for [company]"（[公司] 会议准备）。
+---
 
-description: 准备尽职调查会议 — 管理层演示、专家网络电话、客户参考访谈和顾问会议。生成针对性问题清单、参考基准和需要深入询问的红旗事项。适用于任何尽职调查会议或电话会议前。触发词："prep for management meeting"、"diligence call prep"、"expert call questions"、"customer reference questions"或"meeting prep for [公司]"。
+# 尽职调查会议准备（Diligence Meeting Prep）
 
 ## 工作流程
 
@@ -68,7 +71,7 @@ description: 准备尽职调查会议 — 管理层演示、专家网络电话�
 
 为每个关键主题提供相关基准：
 - 行业增长率和利润率概况
-- 可比公司指标（如果会话中存在 comps 分析）
+- 可比公司指标（如果会话中存在可比公司分析）
 - CIM 或数据室中需要跟进的数据点
 - 不同数据源之间的差异需要澄清
 

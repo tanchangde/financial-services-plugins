@@ -1,6 +1,9 @@
-# 投后监控（Portfolio Monitoring）
+---
+name: portfolio-monitoring-cn
+description: 跟踪和分析投资组合公司相对于计划的表现。导入月度/季度财务包（Excel、PDF），提取 KPI（关键绩效指标），标记与预算的差异，并生成汇总仪表盘。适用于审查投资组合公司财务、准备董事会材料或监控契约合规性。触发词："review portfolio company"（审查投资组合公司）、"monthly financials"（月度财务数据）、"how is [company] performing"（[公司] 表现如何）、"covenant check"（契约检查）或 "portfolio update"（投资组合更新）。
+---
 
-description: 跟踪和分析投资组合公司相对于计划的表现。导入月度/季度财务包（Excel、PDF），提取 KPI（关键绩效指标），标记与预算的差异，并生成汇总仪表盘。适用于审查投资组合公司财务、准备董事会材料或监控契约合规性。触发词："review portfolio company"、"monthly financials"、"how is [company] performing"、"covenant check"或"portfolio update"。
+# 投后监控（Portfolio Monitoring）
 
 ## 工作流程
 

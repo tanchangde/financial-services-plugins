@@ -1,6 +1,6 @@
 ---
 name: competitive-analysis-cn
-description: 适用于任何行业的竞争格局分析框架。用于创建竞争对手分析、市场定位评估、投资备忘录、战略审查或任何需要系统评估竞争动态的分析。触发词包括竞争格局推介、同行比较、市场结构分析、战略定位评估和投资建议。
+description: 适用于任何行业的竞争格局分析框架。用于创建竞争对手分析、市场定位评估、投资备忘录、战略审查或任何需要系统评估竞争动态的分析。触发词："competitive landscape"（竞争格局）、"competitor analysis"（竞争对手分析）、"market positioning"（市场定位）、"peer comparison"（同行比较）、"market structure analysis"（市场结构分析）、"strategic positioning"（战略定位）或 "investment recommendation"（投资建议）。
 ---
 
 # 竞争格局图谱分析

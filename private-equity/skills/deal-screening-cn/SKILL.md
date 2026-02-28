@@ -1,6 +1,9 @@
-# 项目筛选（Deal Screening）
+---
+name: deal-screening-cn
+description: 快速筛选流入的项目 — CIM（保密信息备忘录）、teaser（项目简介）和经纪商材料 — 根据基金的投资标准进行评估。提取关键交易指标，运行通过/失败框架，输出一页筛选备忘录。适用于审查新项目流、分类流入材料或决定是否进行首次通话。触发词："screen this deal"（筛选这个交易）、"review this CIM"（审查这份 CIM）、"should we look at this"（我们应该看这个吗）、"triage this teaser"（分类这个 teaser）或 "deal screening"（交易筛选）。
+---
 
-description: 快速筛选流入的项目 — CIM（保密信息备忘录）、teaser（项目简介）和经纪商材料 — 根据基金的投资标准进行评估。提取关键交易指标，运行通过/失败框架，输出一页筛选备忘录。适用于审查新项目流、分类流入材料或决定是否进行首次通话。触发词："screen this deal"、"review this CIM"、"should we look at this"、"triage this teaser"或"deal screening"。
+# 项目筛选（Deal Screening）
 
 ## 工作流程
 
