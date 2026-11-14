@@ -57,7 +57,7 @@ git push --force-with-lease origin zh    # rebase 改写了历史，备份分支
 | `comps-analysis-zh` | 661 / 612 行 | 已完成，661 / 661 行，条目 178:178 |
 | `3-statement-model-zh` | 408 / 368 行 | 已完成，408 / 408 行，条目 121:121 |
 | `strip-profile-zh` | 385 / 266 行 | 已完成，385 / 385 行，代码块 22:22 |
-| `datapack-builder-zh` | 656 / 598 行 | **待补译**（缺 7 节） |
+| `datapack-builder-zh` | 656 / 598 行 | 已完成，656 / 656 行，代码块 8:8 |
 | `dcf-model-zh` | 1264 / 772 行 | **待补译**（缺 26 节，工作量最大） |
 
 - `competitive-analysis-zh` 比英文源更详细（条目 115 vs 56），属译文扩写，暂不精简。
