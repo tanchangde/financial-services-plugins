@@ -328,7 +328,35 @@ slide.addChart(pptx.charts.LINE, [{
 **始终使用原生 PptxGenJS 表格或图表 - 永远不要纯文本散文或 HTML 表格。**
 
 对财务数据使用 `slide.addTable()`（适合 4:3 幻灯片的左下象限）：
-（代码示例保持相同）
+```javascript
+// 先添加带装饰条的标题
+slide.addShape(pptx.shapes.RECTANGLE, {
+  x: 0.3, y: 3.7, w: 0.08, h: 0.25, fill: { color: 'E31937' }
+});
+slide.addText('Key Financials & Valuation', {
+  x: 0.45, y: 3.7, w: 4.5, h: 0.3, fontSize: 14, bold: true, fontFace: 'Arial'
+});
+
+// 财务数据表格
+slide.addTable([
+  [{ text: 'Metric', options: { bold: true, fill: '003366', color: 'FFFFFF' } },
+   { text: 'FY24', options: { bold: true, fill: '003366', color: 'FFFFFF' } },
+   { text: 'FY25E', options: { bold: true, fill: '003366', color: 'FFFFFF' } }],
+  ['Revenue', '$51.4B', '$54.2B'],
+  ['YoY Growth', '+6.0%', '+5.5%'],
+  ['EBITDA', '$8.9B', '$9.5B'],
+  ['EBITDA Margin', '17.3%', '17.5%'],
+  ['EPS', '$3.42', '$3.75'],
+  ['Market Cap', '$185B', '—'],
+  ['EV/EBITDA', '12.5x', '11.7x']
+], {
+  x: 0.45, y: 4.1, w: 4.3, h: 3.0,  // 位于左下象限标题下方
+  fontFace: 'Arial', fontSize: 10,
+  border: { pt: 0.5, color: 'CCCCCC' },
+  valign: 'middle',
+  colW: [1.8, 1.25, 1.25]  // 列宽
+});
+```
 
 ❌ **不正确：** 纯文本如 `注意：FY2024 收入增长 +1.0%，净利润 51 亿美元...`
 ❌ **不正确：** 无法正确转换为 PowerPoint 的 HTML 表格
