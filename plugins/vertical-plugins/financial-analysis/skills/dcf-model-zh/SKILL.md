@@ -17,11 +17,52 @@ description: 创建真正的DCF（折现现金流）模型用于股权估值。�
 
 这些约束适用于所有DCF模型构建。在开始之前复习：
 
+**运行环境：Office JS 还是 Python/openpyxl：**
+- **如果在 Excel 内运行（Office 加载项 / Office JS 环境）：** 直接使用 Office JS —— 不要用 Python/openpyxl。通过 `range.formulas = [["=D19*(1+$B$8)"]]` 写公式。不需要额外的重算步骤，Excel 原生计算。样式用 `range.format.*`。同样遵循公式优于硬编码：派生单元格设置 `.formulas`，绝不用 `.values`。
+- **如果生成独立的 .xlsx 文件（没有活动的 Excel 会话）：** 按下文使用 Python/openpyxl，交付前运行 `recalc.py`。
+- 本技能其余部分使用 openpyxl 示例 —— 在该环境下请转换为 Office JS API 调用，但所有原则（公式字符串、单元格批注、分节确认、敏感性表循环）完全相同。
+
+**⚠️ Office JS 合并单元格陷阱：** 用合并单元格构建章节标题时，不要先 `.merge()` 再对合并区域设置 `.values` —— Office JS 仍按区域原始尺寸报告，会抛 `InvalidArgument: The number of rows or columns in the input array doesn't match the size or dimensions of the range`。正确做法：先只写左上角单元格，再合并并格式化整个区域：
+
+```js
+// WRONG — throws InvalidArgument:
+const hdr = ws.getRange("A7:H7");
+hdr.merge();
+hdr.values = [["MARKET DATA & KEY INPUTS"]];  // 1x1 array vs 1x8 range -> fails
+
+// CORRECT — value first on single cell, then merge + format the range:
+ws.getRange("A7").values = [["MARKET DATA & KEY INPUTS"]];
+const hdr = ws.getRange("A7:H7");
+hdr.merge();
+hdr.format.fill.color = "#1F4E79";
+hdr.format.font.bold = true;
+hdr.format.font.color = "#FFFFFF";
+```
+
+这适用于 DCF 中每个合并的章节标题（市场数据、情景块、现金流预测、终值、估值汇总、敏感性表）。
+
+**公式优先于硬编码（不可妥协）：**
+- 每个预测、利润率、折现系数、PV 和敏感性单元格都必须是可计算的 Excel 公式 —— 绝不是 Python 算好写成数字的值
+- 使用 openpyxl 时：`ws["D20"] = "=D19*(1+$B$8)"` 正确；`ws["D20"] = calculated_revenue` 错误
+- 唯一允许的硬编码数字是：（1）原始历史输入，（2）假设驱动项（增长率、WACC 输入、终值 g），（3）当前市场数据（股价、债务余额）
+- 如果发现自己在 Python 里算出结果再写进单元格 —— 停下。用户修改假设时，模型必须能联动。
+
+**与用户逐步验证（不要端到端一次性建完）：**
+- 数据获取后 → 展示原始输入块（收入、利润率、股数、净债务），确认后再做预测
+- 收入预测后 → 展示预测收入与增长率，确认后再构建利润率
+- FCF 构建后 → 展示完整 FCF 计划表，确认逻辑后再计算 WACC
+- WACC 之后 → 展示计算过程与输入，确认后再折现
+- 终值 + PV 之后 → 展示股权桥（EV → 股权价值 → 每股），确认后再做敏感性表
+- 每个阶段都要抓错 —— 敏感性表建好之后才发现利润率假设错了，意味着下游全部返工
+
 **敏感性表：**
-- 使用完整DCF重新计算公式填充所有75个单元格（3个表 × 25个单元格）
-- 使用openpyxl循环以编程方式写入公式
-- 无占位符文本、无线性近似、无需手动步骤
-- 每个单元格必须为该假设组合重新计算完整DCF
+- **行数和列数都用奇数**（标准 5×5，有时 7×7）—— 保证存在真正的中心单元格
+- **中心单元格 = 基准情形。** 轴值要让中间行标题和中间列标题与模型的实际假设完全相等（如基准 WACC = 9.0%，中间行就是 9.0%；终值 g = 3.0%，中间列就是 3.0%）。因此中心单元格的输出必须等于模型实际的隐含股价 —— 这是检验表构建正确的合理性检查。
+- **高亮中心单元格**，用中蓝填充（`#BDD7EE`）+ 加粗字体，一眼可见哪个是基准情形。
+- 为所有单元格填入完整 DCF 重算公式（通常 3 张表 × 25 = 75 个）
+- 用 openpyxl 循环（或 Office JS 循环）以编程方式写公式
+- 不要占位文本、不要线性近似、不需要手工步骤
+- 每个单元格都必须为该假设组合重算完整 DCF
 
 **单元格注释：**
 - 在创建每个硬编码值时添加单元格注释
@@ -707,65 +748,511 @@ FCF部分引用错误的假设行：
 
 ## Excel文件创建
 
-**此技能使用`xlsx`技能进行所有电子表格操作。** xlsx技能提供：
-- 标准化的公式构建和格式
-- 自动公式审计
-- 专业输出格式
+**本技能的所有电子表格操作都使用 `xlsx` 技能。** xlsx 技能提供：
+- 标准化的公式构建规则
+- 数字格式约定
+- 通过 `recalc.py` 脚本自动重算公式
+- 完整的错误检查与校验
 
-### xlsx技能集成
+本技能创建的所有 Excel 文件都必须符合 xlsx 技能要求，包括零公式错误和正确的重算。
 
-DCF模型构建使用xlsx技能来：
-1. 创建和格式化Excel工作簿
-2. 构建所有DCF公式
-3. 应用专业格式
-4. 添加敏感性表
-5. 运行公式验证
+## 质量准则
 
-### 使用openpyxl
+每个 DCF 模型都必须在以下方面做到最好：
+1. **基于历史表现的、现实可行的收入与利润率假设**
+2. **采用正确 CAPM 方法的、合理的资本成本计算**
+3. **完整的敏感性分析**，展示估值区间
+4. **清晰的终值计算**，并附理由
+5. **专业的模型结构**，支持情景分析
+6. **透明的文档记录**，说明所有关键假设
 
-对于敏感性表，使用openpyxl直接操作Excel文件：
+## 输入要求
 
-```python
-import openpyxl
+### 最低必需输入
+1. **公司标识**：股票代码或公司名称
+2. **增长假设**：预测期的收入增长率（或"使用市场一致预期"）
+3. **可选参数**：
+   - 预测期（默认：5 年）
+   - 情景（熊市/基准/牛市的增长与利润率假设）
+   - 终值增长率（默认：2.5-3.0%）
+   - 若不使用 CAPM，则提供具体的 WACC 输入
 
-# 打开模型
-wb = openpyxl.load_workbook('model.xlsx')
-ws = wb['DCF']
+## Excel 模型结构
 
-# 填充敏感性表
-for row_idx, wacc in enumerate(wacc_values):
-    for col_idx, term_growth in enumerate(term_growth_values):
-        cell = ws.cell(row=start_row + row_idx, column=start_col + col_idx)
-        # 构建引用当前wacc和term_growth的公式
-        cell.value = f"=你的DCF公式使用${wacc}和{term_growth}"
+### 工作表架构
 
-wb.save('model.xlsx')
-```
+创建**两张工作表**：
 
-## 交付要求
+1. **DCF** —— 主估值模型，敏感性分析放在底部
+2. **WACC** —— 资本成本计算
 
-所有DCF模型必须：
-1. 零公式错误（#REF!、#DIV/0!、#VALUE!等）
-2. 所有假设有来源注释
-3. 完整的敏感性分析（75个公式）
-4. 熊市/基准/牛市情景
-5. 清晰的估值桥接
-6. 专业格式
+**关键**：敏感性表放在 DCF 工作表的**底部**（不是单独的工作表）。这样所有估值输出都集中在一起。
 
-## 数据验证
+### 公式重算（强制）
 
-构建模型后，运行验证：
+在创建或修改 Excel 模型后，用 xlsx 技能的 recalc.py 脚本**重算所有公式**：
+
 ```bash
-python recalc.py model.xlsx 30
+python recalc.py [path_to_excel_file] [timeout_seconds]
 ```
 
-此脚本将：
-- 检查所有公式错误
-- 验证三表链接
-- 确认资产负债表平衡
-- 测试敏感性表
+示例：
+```bash
+python recalc.py AAPL_DCF_Model_2025-10-12.xlsx 30
+```
 
-只有在所有检查通过后才交付。
+脚本会：
+- 用 LibreOffice 重算所有工作表的所有公式
+- 扫描**所有**单元格中的 Excel 错误（#REF!、#DIV/0!、#VALUE!、#NAME?、#NULL!、#NUM!、#N/A）
+- 返回包含错误位置与数量的详细 JSON
+
+**预期输出格式：**
+```json
+{
+  "status": "success",           // 或 "errors_found"
+  "total_errors": 0,              // 错误总数
+  "total_formulas": 42,           // 文件中的公式数量
+  "error_summary": {}             // 仅在有错误时出现
+}
+```
+
+**若发现错误**，输出会包含细节：
+```json
+{
+  "status": "errors_found",
+  "total_errors": 2,
+  "total_formulas": 42,
+  "error_summary": {
+    "#REF!": {
+      "count": 2,
+      "locations": ["DCF!B25", "DCF!C25"]
+    }
+  }
+}
+```
+
+交付模型前**修复所有错误**，并重复运行 recalc.py 直到状态为 "success"。
+
+### 格式标准
+
+**重要**：公式构建规则与数字格式约定遵循 xlsx 技能。DCF 技能在此基础上增加具体的视觉呈现标准。
+
+**配色方案 —— 两层**：
+
+**第一层：字体颜色（xlsx 技能强制要求）**
+- **蓝色文字（RGB: 0,0,255）**：所有硬编码输入（股价、股数、历史数据、假设）
+- **黑色文字（RGB: 0,0,0）**：所有公式与计算
+- **绿色文字（RGB: 0,128,0）**：跨表链接（引用 WACC 工作表）
+
+**第二层：填充颜色 —— 专业蓝灰色板（除非用户另有指定，否则为默认）**
+- **保持克制** —— 填充只用蓝色和灰色。不要引入绿色、黄色、橙色或多种强调色。颜色过多的模型显得业余。
+- **默认填充色板：**
+  - **章节标题**：深蓝色（RGB: 31,78,121 / `#1F4E79`）底 + 白色加粗文字
+  - **子标题/列标题**：浅蓝色（RGB: 217,225,242 / `#D9E1F2`）底 + 黑色加粗文字
+  - **输入单元格**：浅灰色（RGB: 242,242,242 / `#F2F2F2`）底 + 蓝色字体 —— 若追求极简，也可白底 + 蓝色字体
+  - **计算单元格**：白底 + 黑色字体
+  - **输出/汇总行**（每股价值、EV 等）：中蓝色（RGB: 189,215,238 / `#BDD7EE`）底 + 黑色加粗字体
+- **就这些 —— 3 种蓝 + 1 种灰 + 白色。** 克制住加更多颜色的冲动。
+- 用户提供的模板或明确的颜色偏好**始终**优先于这些默认值。
+
+**两层如何配合：**
+- 输入单元格：蓝色字体 + 浅灰填充 = "硬编码输入"
+- 公式单元格：黑色字体 + 白色底 = "计算值"
+- 工作表链接：绿色字体 + 白色底 = "来自其他工作表的引用"
+- 关键输出：黑色加粗字体 + 中蓝填充 = "这就是答案"
+
+**字体颜色告诉你它是「什么」（输入/公式/链接），填充颜色告诉你你在「哪里」（标题/数据/输出）。**
+
+### 边框标准（专业外观必需）
+
+**粗边框**（1.5pt）包围主要章节：
+- 关键输入（KEY INPUTS）章节
+- 预测假设（PROJECTION ASSUMPTIONS）章节
+- 5 年现金流预测（5-YEAR CASH FLOW PROJECTION）章节
+- 终值（TERMINAL VALUE）章节
+- 估值汇总（VALUATION SUMMARY）章节
+- 每个敏感性分析（SENSITIVITY ANALYSIS）表
+
+**中等边框**（1pt）分隔子章节：
+- 公司详情 vs 历史表现
+- 增长假设 vs EBIT 利润率 vs FCF 参数
+
+**细边框**（0.5pt）包围数据表：
+- 情景假设表（Bear | Base | Bull | Selected）
+- 历史 vs 预测财务矩阵
+
+**不加边框**：表格内的单个单元格（保持干净、便于扫读）
+
+**边框是强制要求** —— 没有专业边框的模型不能交付客户。
+
+**数字格式**（遵循 xlsx 技能标准）：
+- **年份**：格式化为文本字符串（如 "2024"，而不是 "2,024"）
+- **百分比**：`0.0%`（一位小数）
+- **货币**：百万用 `$#,##0`；每股用 `$#,##0.00` —— 表头**始终**写明单位（"Revenue ($mm)"）
+- **零值**：用数字格式把所有零显示为 "-"（如 `$#,##0;($#,##0);-`）
+- **大数**：`#,##0` 带千位分隔符
+- **负数**：用括号 `(#,##0)`（不用负号）
+
+**单元格批注（所有硬编码输入强制要求）**：
+
+按 xlsx 技能要求，所有硬编码值都必须有记录来源的单元格批注。格式："来源：[系统/文档]，[日期]，[引用]，[适用时附 URL]"
+
+**关键**：在**创建单元格时**就添加批注，不要留到最后。
+
+### DCF 工作表详细结构
+
+**第 1 部分：表头**
+```csv
+Row,Content
+1,[Company Name] DCF Model
+2,Ticker: [XXX] | Date: [Date] | Year End: [FYE]
+3,Blank
+4,Case Selector Cell (1=Bear 2=Base 3=Bull)
+5,Case Name Display (formula: =IF([Selector]=1"Bear"IF([Selector]=2"Base""Bull")))
+```
+
+**第 2 部分：市场数据（不随情景变化）**
+```csv
+Item,Value
+Current Stock Price,$XX.XX
+Shares Outstanding (M),XX.X
+Market Cap ($M),[Formula]
+Net Debt ($M),XXX [or Net Cash if negative]
+```
+
+**第 3 部分：DCF 情景假设**
+
+为每个情景（熊市、基准、牛市）创建独立的假设块，包含 DCF 专用假设（收入增长率 %、EBIT 利润率 %、税率 %、D&A 占收入 %、CapEx 占收入 %、NWC 变动占 Δ收入 %、终值增长率、WACC），按预测年份横向排列。每个块都必须包含章节标题、显示预测年份（FY1、FY2 等）的列表头行，以及数据行。确切版式见 `<correct_patterns>` 中的「正确的假设表结构」。
+
+**第 4 部分：历史与预测财务**
+
+**引用一个汇总列（如 "Selected Case"）从情景块取值**，而不是在每个预测行里散落 IF 公式。
+
+```csv
+Income Statement ($M),2020A,2021A,2022A,2023A,2024E,2025E,2026E
+Revenue,XXX,XXX,XXX,XXX,[=E29*(1+$E$10)],[=F29*(1+$E$11)],[=G29*(1+$E$12)]
+  % growth,XX%,XX%,XX%,XX%,[=E29/D29-1],[=F29/E29-1],[=G29/F29-1]
+,,,,,,
+Gross Profit,XXX,XXX,XXX,XXX,[=E29*E33],[=F29*F33],[=G29*G33]
+  % margin,XX%,XX%,XX%,XX%,[=E33/E29],[=F33/F29],[=G33/G29]
+,,,,,,
+Operating Expenses:,,,,,,,
+  S&M,XXX,XXX,XXX,XXX,[=E29*0.15],[=F29*0.14],[=G29*0.13]
+  R&D,XXX,XXX,XXX,XXX,[=E29*0.12],[=F29*0.11],[=G29*0.10]
+  G&A,XXX,XXX,XXX,XXX,[=E29*0.08],[=F29*0.07],[=G29*0.07]
+  Total OpEx,XXX,XXX,XXX,XXX,[=E36+E37+E38],[=F36+F37+F38],[=G36+G37+G38]
+,,,,,,
+EBIT,XXX,XXX,XXX,XXX,[=E33-E39],[=F33-F39],[=G33-G39]
+  % margin,XX%,XX%,XX%,XX%,[=E41/E29],[=F41/F29],[=G41/G29]
+,,,,,,
+Taxes,(XX),(XX),(XX),(XX),[=E41*$E$24],[=F41*$E$24],[=G41*$E$24]
+  Tax rate,XX%,XX%,XX%,XX%,[=E43/E41],[=F43/F41],[=G43/G41]
+,,,,,,
+NOPAT,XXX,XXX,XXX,XXX,[=E41-E43],[=F41-F43],[=G41-G43]
+```
+
+**关键公式模式**：
+- 收入增长：`=E29*(1+$E$10)`，其中 $E$10 是第 1 年增长的汇总列
+- **不是**：`=E29*(1+IF($B$6=1,$B$10,IF($B$6=2,$C$10,$D$10)))`
+
+这种做法更干净、更易审计，并通过集中管理情景逻辑来避免公式错误。
+
+**第 5 部分：自由现金流构建**
+
+**关键**：确认行引用指向**正确的**假设行。创建公式后立即测试。
+
+```csv
+Cash Flow ($M),2020A,2021A,2022A,2023A,2024E,2025E,2026E
+NOPAT,XXX,XXX,XXX,XXX,[=E45],[=F45],[=G45]
+(+) D&A,XXX,XXX,XXX,XXX,[=E29*$E$21],[=F29*$E$21],[=G29*$E$21]
+    % of Rev,XX%,XX%,XX%,XX%,[=E58/E29],[=F58/F29],[=G58/G29]
+(-) CapEx,(XX),(XX),(XX),(XX),[=E29*$E$22],[=F29*$E$22],[=G29*$E$22]
+    % of Rev,XX%,XX%,XX%,XX%,[=E60/E29],[=F60/F29],[=G60/G29]
+(-) Δ NWC,(XX),(XX),(XX),(XX),[=(E29-D29)*$E$23],[=(F29-E29)*$E$23],[=(G29-F29)*$E$23]
+    % of Δ Rev,XX%,XX%,XX%,XX%,[=E62/(E29-D29)],[=F62/(F29-E29)],[=G62/(G29-F29)]
+,,,,,,
+Unlevered FCF,XXX,XXX,XXX,XXX,[=E57+E58-E60-E62],[=F57+F58-F60-F62],[=G57+G58-G60-G62]
+```
+
+**行引用示例**（基于版式规划）：
+- $E$21 = D&A % 假设（汇总列，第 21 行）
+- $E$22 = CapEx % 假设（汇总列，第 22 行）
+- $E$23 = NWC % 假设（汇总列，第 23 行）
+- E29 = 当年收入（第 29 行）
+- E45 = 当年 NOPAT（第 45 行）
+
+**写公式之前**：确认这些行号与实际版式一致。先测一列，再横向复制。
+
+**第 6 部分：折现与估值**
+```csv
+DCF Valuation,2024E,2025E,2026E,2027E,2028E,Terminal
+Unlevered FCF ($M),XXX,XXX,XXX,XXX,XXX,
+Period,0.5,1.5,2.5,3.5,4.5,
+Discount Factor,0.XX,0.XX,0.XX,0.XX,0.XX,
+PV of FCF ($M),XXX,XXX,XXX,XXX,XXX,
+,,,,,,
+Terminal FCF ($M),,,,,,,XXX
+Terminal Value ($M),,,,,,,XXX
+PV Terminal Value ($M),,,,,,,XXX
+,,,,,,
+Valuation Summary ($M),,,,,,
+Sum of PV FCFs,XXX,,,,,
+PV Terminal Value,XXX,,,,,
+Enterprise Value,XXX,,,,,
+(-) Net Debt,(XX),,,,,
+Equity Value,XXX,,,,,
+,,,,,,
+Shares Outstanding (M),XX.X,,,,,
+IMPLIED PRICE PER SHARE,$XX.XX,,,,,
+Current Stock Price,$XX.XX,,,,,
+Implied Upside/(Downside),XX%,,,,,
+```
+
+### WACC 工作表结构
+
+```csv
+COST OF EQUITY CALCULATION,,
+Risk-Free Rate (10Y Treasury),X.XX%,[Yellow input]
+Beta (5Y monthly),X.XX,[Yellow input]
+Equity Risk Premium,X.XX%,[Yellow input]
+Cost of Equity,X.XX%,[Calculated blue]
+,,
+COST OF DEBT CALCULATION,,
+Credit Rating,AA-,[Yellow input]
+Pre-Tax Cost of Debt,X.XX%,[Yellow input]
+Tax Rate,XX.X%,[Link to DCF sheet]
+After-Tax Cost of Debt,X.XX%,[Calculated blue]
+,,
+CAPITAL STRUCTURE,,
+Current Stock Price,$XX.XX,[Link to DCF]
+Shares Outstanding (M),XX.X,[Link to DCF]
+Market Capitalization ($M),"X,XXX",[Calculated]
+,,
+Total Debt ($M),XXX,[Yellow input]
+Cash & Equivalents ($M),XXX,[Yellow input]
+Net Debt ($M),XXX,[Calculated]
+,,
+Enterprise Value ($M),"X,XXX",[Calculated]
+,,
+WACC CALCULATION,Weight,Cost,Contribution
+Equity,XX.X%,X.X%,X.XX%
+Debt,XX.X%,X.X%,X.XX%
+,,
+WEIGHTED AVERAGE COST OF CAPITAL,X.XX%,[Green output]
+```
+
+**关键 WACC 公式：**
+```
+Market Cap = Price × Shares
+Net Debt = Total Debt - Cash
+Enterprise Value = Market Cap + Net Debt
+Equity Weight = Market Cap / EV
+Debt Weight = Net Debt / EV
+WACC = (Cost of Equity × Equity Weight) + (After-tax Cost of Debt × Debt Weight)
+```
+
+### 敏感性分析（DCF 工作表底部）
+
+**术语提醒**："敏感性表" = 带行标题、列标题、且每个数据单元格都是公式的简单二维网格。**不是** Excel 的 "Data Table" 功能（Data → What-If Analysis → Data Table）。你要用 openpyxl 把普通 Excel 公式写进每个单元格。
+
+**位置**：DCF 工作表第 87 行以下（**不是**单独的工作表）
+
+**三张敏感性表，纵向堆叠：**
+
+1. **WACC vs 终值增长率**（第 87-100 行）—— 5x5 网格 = 25 个带公式的单元格
+2. **收入增长 vs EBIT 利润率**（第 102-115 行）—— 5x5 网格 = 25 个带公式的单元格
+3. **Beta vs 无风险利率**（第 117-130 行）—— 5x5 网格 = 25 个带公式的单元格
+
+**总共要写 75 个公式**（这是必需项，不是可选项）
+
+**关键**：所有敏感性表单元格都必须用 openpyxl 以编程方式填入公式。不要用线性近似走捷径。不要留下占位文本或"手工步骤"说明。不要因为"太复杂"就认为留空合理 —— 用 Python 循环生成公式。
+
+**表格设置：**
+1. 创建带行/列标题的表结构（要测试的假设取值）
+2. 为**每个**数据单元格填入公式，该公式：
+   - 使用行标题值（如 WACC = 9.0%）
+   - 使用列标题值（如 终值增长率 = 3.0%）
+   - 用这些具体假设重算完整 DCF
+   - 返回该情景下的隐含股价
+3. 交付时所有单元格都必须是可用的公式
+4. 用条件格式：高值用绿色渐变，低值用红色渐变
+5. 基准情形单元格加粗
+6. 表与表之间留 1-2 个空行
+
+**不需要手工干预** —— 用户打开文件时，敏感性表必须完全可用。
+
+## Case Selector（情景选择器）实现
+
+**三情景框架：**
+
+### 熊市情景
+- 保守的收入增长（历史区间低端）
+- 利润率压缩或不扩张
+- 更高的 WACC（风险溢价上升）
+- 更低的终值增长率
+- 更高的 CapEx 假设
+
+### 基准情景
+- 市场一致预期或管理层指引的收入增长
+- 基于经营杠杆的适度利润率扩张
+- 当前市场隐含的 WACC
+- 与 GDP 一致的终值增长率（2.5-3.0%）
+- 标准 CapEx 假设
+
+### 牛市情景
+- 乐观的收入增长（预测区间高端）
+- 显著的利润率扩张
+- 更低的 WACC（风险溢价下降）
+- 更高的终值增长率（3.5-5.0%）
+- 更低的 CapEx 强度
+
+**公式实现：**
+
+**不要在模型中到处散落嵌套 IF 公式。** 而是创建一个汇总列，用 INDEX 或 OFFSET 公式从对应情景块取值。
+
+**推荐模式（使用 INDEX）：**
+`=INDEX(B10:D10, 1, $B$6)`，其中 `B10:D10` = 熊市/基准/牛市取值，`1` = 行偏移，`$B$6` = 情景选择单元格（1、2 或 3）
+
+**然后在所有预测中引用该汇总列：**
+`Revenue Year 1: =D29*(1+$E$10)`，其中 $E$10 是第 1 年增长的汇总列取值。
+
+这种做法把情景逻辑集中管理，使模型更易审计和维护。
+
+## 交付物结构
+
+**文件命名**：`[Ticker]_DCF_Model_[Date].xlsx`
+
+**两张工作表**：
+1. **DCF** —— 完整模型，含熊市/基准/牛市情景 + 底部三张敏感性表（WACC vs 终值增长率、收入增长 vs EBIT 利润率、Beta vs 无风险利率）
+2. **WACC** —— 资本成本计算
+
+**关键特征**：情景选择器（1/2/3）、使用 INDEX/OFFSET 公式的汇总列、颜色编码的单元格、所有输入都有单元格批注、专业边框
+
+## 最佳实践
+
+### 模型构建
+1. **增量构建**：完成一个章节再进入下一个
+2. **边建边测**：输入样例数字验证公式
+3. **结构一致**：相似的计算遵循相似的模式
+4. **注释复杂公式**：为非常规计算加说明
+5. **内置检查**：适用处加入合计检查与平衡检查
+
+### 文档记录
+1. **记录所有假设**：解释关键输入的推理依据
+2. **注明数据来源**：标明每个数据点的出处
+3. **说明方法**：描述任何非标准的处理方式
+4. **标注不确定性**：突出可见度有限的区域
+
+### 质量控制
+1. **交叉核对计算**：用多种方式验证数值
+2. **压力测试假设**：运行敏感性分析确认模型稳健
+3. **同行复核**：让他人检查公式
+4. **版本管理**：随进展保存版本
+
+## 常见变体
+
+### 高增长科技公司
+- 更长的预测期（7-10 年）
+- 更高的初期增长率（20-30%）
+- 随时间显著扩张的利润率
+- 更高的 WACC（12-15%）
+- 建模单位经济性（用户数、ARPU 等）
+
+### 成熟/稳定公司
+- 更短的预测期（3-5 年）
+- 温和的增长率（GDP +1-3%）
+- 稳定的利润率
+- 更低的 WACC（7-9%）
+- 关注现金生成与资本配置
+
+### 周期性公司
+- 跨经济周期建模
+- 在中周期水平上归一化利润率
+- 考虑谷底与峰值情景
+- 针对周期性调整 Beta
+
+### 多业务板块公司
+- 为每个业务单元分别做 DCF
+- 各板块使用不同的增长率与利润率
+- 分部加总估值
+- 考虑协同效应
+
+## 故障排查
+
+**如遇到错误或异常结果，请阅读 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) 获取详细调试指引。**
+
+## 工作流集成
+
+### DCF 构建开始时
+
+1. **收集市场数据**：
+   - 检查是否有可用的 MCP 服务器提供当前市场数据
+   - 用网络搜索/抓取获取股价、Beta 及其他市场指标
+   - 如需特定数据，向用户索取
+
+2. **收集历史财务数据**：
+   - 检查可用的 MCP 服务器（Daloopa 等）
+   - 若 MCP 不可用，向用户索取
+   - 必要时从 10-K 中手工提取
+
+3. **开始构建模型**，使用本技能详述的 DCF 方法
+
+### 模型构建过程中
+
+1. **用 openpyxl 构建 Excel 模型**，写入公式（而非硬编码数值）
+2. **遵循 xlsx 技能约定**进行公式构建与格式化
+3. **仅在用户要求或提供了具体品牌规范时**才应用填充颜色
+
+### 交付模型前（强制）
+
+1. **核实结构**：
+   - 熊市/基准/牛市的情景块，假设按预测年份横向展开
+   - 情景选择器可用，公式引用正确的情景块
+   - 敏感性表位于 DCF 工作表底部（不是单独工作表）
+   - 字体颜色：蓝色输入、黑色公式、绿色跨表链接
+   - **所有**硬编码输入都有单元格批注
+   - 主要章节有专业边框
+
+2. **重算公式**：运行 `python recalc.py model.xlsx 30`
+
+3. **检查输出**：
+   - 若 `status` 为 `"success"` → 进入第 4 步
+   - 若 `status` 为 `"errors_found"` → 查看 `error_summary`，并阅读 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) 获取调试指引
+
+4. **修复错误并重跑 recalc.py**，直到状态为 "success"
+
+5. **抽查公式**：
+   - 测试一个 FCF 公式 —— 它引用的假设行正确吗？
+   - 切换情景选择器 —— 汇总列是否正确更新？
+   - 确认收入公式引用的是汇总列（而不是嵌套 IF 公式）
+
+6. **交付模型**
+
+### 可用数据源
+
+- **MCP 服务器**：若已配置（Daloopa 提供历史财务数据）
+- **网络搜索/抓取**：用于当前股价、Beta 和市场数据
+- **用户提供的数据**：历史财务数据、一致预期
+- **手工提取**：SEC EDGAR 申报文件作为兜底
+
+## 最终输出检查清单
+
+交付 DCF 模型前：
+
+**必需项：**
+- 运行 `python recalc.py model.xlsx 30`，直到状态为 "success"（零公式错误）
+- 两张工作表：DCF（敏感性表在底部）、WACC
+- 字体颜色：蓝色=输入、黑色=公式、绿色=跨表链接
+- **所有**硬编码输入都有单元格批注
+- 敏感性表已用公式完整填充
+- 主要章节有专业边框
+
+**校验项：**
+- 运营费用基于收入（而非毛利润）
+- 终值占 EV 的 50-70%
+- 终值增长率 < WACC
+- 税率 21-28%
+- 文件命名：`[Ticker]_DCF_Model_[Date].xlsx`
 
 ---
 
