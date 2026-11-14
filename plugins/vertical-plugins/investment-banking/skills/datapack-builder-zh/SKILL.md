@@ -339,7 +339,65 @@ description: 从各种来源（包括 CIM、发售备忘录、SEC 申报文件�
 - 创建跨工作表引用进行验证
 - 避免硬编码任何计算值
 
-（正确模式和常见错误的详细代码示例 - 保持与英文版本相同）
+<correct_patterns>
+
+### 行引用跟踪 - 复制此模式
+
+**写入数据时记录行号，然后在公式中引用：**
+
+```python
+# ✅ 正确 - 写入时记录行号
+revenue_row = row
+write_data_row(ws, row, "Revenue", revenue_values)
+row += 1
+
+ebitda_row = row
+write_data_row(ws, row, "EBITDA", ebitda_values)
+row += 1
+
+# 在公式中使用已记录的行号
+margin_row = row
+for col in year_columns:
+    cell = ws.cell(row=margin_row, column=col)
+    cell.value = f"={get_column_letter(col)}{ebitda_row}/{get_column_letter(col)}{revenue_row}"
+```
+
+**复杂模型使用字典：**
+
+```python
+row_refs = {
+    'revenue': 5,
+    'cogs': 6,
+    'gross_profit': 7,
+    'ebitda': 12
+}
+
+# 后续在公式中使用
+margin_formula = f"=B{row_refs['ebitda']}/B{row_refs['revenue']}"
+```
+
+</correct_patterns>
+
+<common_mistakes>
+
+### 错误做法：硬编码行偏移量
+
+**不要使用相对偏移 —— 表格结构调整时它们会失效：**
+
+```python
+# ❌ 错误 - 脆弱的偏移引用
+formula = f"=B{row-15}/B{row-19}"  # row-15 是什么？row-19 是什么？
+
+# ❌ 错误 - 魔法数字
+formula = f"=B{current_row-10}*C{current_row-20}"
+```
+
+**为什么这会失败：**
+- 增删行时会静默失效
+- 无法通过阅读代码验证正确性
+- 在交付的 Excel 文件里制造调试噩梦
+
+</common_mistakes>
 
 **步骤 3.4：应用专业呈现**
 - 在每个数据工作表上冻结顶行和第一列
