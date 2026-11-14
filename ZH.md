@@ -29,7 +29,7 @@ git fetch upstream
 git switch main && git merge --ff-only upstream/main
 git switch zh   && git rebase main
 git tag zh-sync-$(git rev-parse --short upstream/main)
-git push origin zh
+git push --force-with-lease origin zh    # rebase 改写了历史，备份分支需要 force-with-lease
 ```
 
 - 冲突通常只出现在上游重命名/移动/删除技能目录时，按下面的映射表处理。
@@ -37,8 +37,8 @@ git push origin zh
 
 ## 同步基线
 
-- 最近一次翻译基线：`zh-sync-1415e01`（上游 `main@1415e01`）
-- `main` 已推进至 `3e32c22`，下一次同步时把翻译层 rebase 上去
+- 最近一次翻译基线：`zh-sync-3e32c22`（上游 `main@3e32c22`，2026-11-14 同步）
+- 历史上还保留了 `zh-sync-1415e01`（翻译层初次对齐时的基线）
 
 ## 命名映射（英文 → 中文目录）
 
