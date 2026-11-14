@@ -1,5 +1,5 @@
 ---
-name: fsi-comps-analysis-zh
+name: comps-analysis-zh
 description: 构建机构级可比公司分析，包含运营指标、估值倍数和 Excel/电子表格格式的统计基准测试。用于公开公司估值（并购、投资分析）、与行业同行对比绩效、IPO 或融资轮次定价、识别估值异常值。触发词："comps analysis"（可比公司分析）、"comparable companies"（可比公司）、"peer comparison"（同行比较）、"valuation multiples"（估值倍数）、"public company comparables"（上市公司可比分析）或 "benchmark against peers"（与同行基准对比）。
 ---
 # 可比公司分析

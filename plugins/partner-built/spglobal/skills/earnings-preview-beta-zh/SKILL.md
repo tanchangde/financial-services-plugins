@@ -1,5 +1,5 @@
 ---
-name: earnings-preview-single-zh
+name: earnings-preview-beta-zh
 description: 为单家公司生成简洁的 4-5 页股票研究财报预览。分析最新的财报电话会议记录、竞争对手格局、估值和近期新闻，生成专业的 HTML 报告。
 ---
 

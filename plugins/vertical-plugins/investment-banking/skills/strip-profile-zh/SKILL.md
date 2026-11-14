@@ -1,5 +1,5 @@
 ---
-name: fsi-strip-profile-zh
+name: strip-profile-zh
 description: |
   制作专业的投行公司概览页（strip profiles）用于路演、交易材料和客户演示。生成 1-4 个信息密集的幻灯片，具有象限布局、图表和表格。
 ---
