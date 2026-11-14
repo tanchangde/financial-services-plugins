@@ -96,7 +96,29 @@ description: |
 - 内部所有权%
 
 **行间距 - 每个部分使用单个文本框：**
-（代码示例保持与英文版本相同）
+```python
+def add_section(slide, x, y, w, header_text, bullets, header_size=10, bullet_size=8):
+    """标题 + 项目符号放在同一文本框，使用自然间距"""
+    tb = slide.shapes.add_textbox(x, y, w, Inches(len(bullets) * 0.18 + 0.3))
+    tf = tb.text_frame
+    tf.word_wrap = True
+
+    # 标题段落
+    p = tf.paragraphs[0]
+    p.text = header_text
+    p.font.bold = True
+    p.font.size = Pt(header_size)
+    p.font.color.rgb = RGBColor(0, 51, 102)
+    p.space_after = Pt(6)  # 标题后留一个小间隙
+
+    # 项目符号段落
+    for bullet in bullets:
+        p = tf.add_paragraph()
+        p.text = bullet
+        p.font.size = Pt(bullet_size)
+        p.space_after = Pt(3)
+    return tb
+```
 
 **关键间距原则：**
 - 将标题 + 项目符号放在同一文本框中（无单独的标题文本框）
@@ -159,10 +181,26 @@ PptxGenJS 使用英寸。4:3 幻灯片 = **10" 宽 × 7.5" 高**。
 - **内容必须保持在边界内** - 在所有边上留下 0.3" 边距
 
 ### 第一页定位（英寸）
-（图表保持与英文版本相同）
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ y=0.2  标题：公司名称（股票代码）                                │
+├────────────────────────────┬────────────────────────────────────┤
+│ y=0.6  公司概述            │ y=0.6  业务与定位                  │
+│ x=0.3, w=4.7               │ x=5.0, w=4.7                       │
+│ h=3.0                      │ h=3.0                              │
+├────────────────────────────┼────────────────────────────────────┤
+│ y=3.7  关键财务            │ y=3.7  股价/近期发展               │
+│ x=0.3, w=4.7               │ x=5.0, w=4.7                       │
+│ h=3.5                      │ h=3.5                              │
+└────────────────────────────┴────────────────────────────────────┘
+                                                            y=7.5
+```
 
 ### 标题部分（y=0.2）
 **公司名称（股票代码）** - 示例：`Tesla, Inc. (TSLA)`
+```javascript
+slide.addText('Tesla, Inc. (TSLA)', { x: 0.3, y: 0.2, w: 9.4, h: 0.35, fontSize: 18, bold: true });
+```
 
 ### 4 象限布局（y=0.6 到 y=7.2）
 
@@ -187,7 +225,16 @@ PptxGenJS 使用英寸。4:3 幻灯片 = **10" 宽 × 7.5" 高**。
 
 ### 视觉强调（必需）
 每个象限标题左侧必须有彩色装饰条：
-（代码示例保持相同）
+```javascript
+// 为象限标题添加装饰条
+slide.addShape(pptx.shapes.RECTANGLE, {
+  x: 0.3, y: 0.6, w: 0.08, h: 0.25,
+  fill: { color: 'E31937' }  // 使用公司品牌色
+});
+slide.addText('Company Overview', {
+  x: 0.45, y: 0.6, w: 4.5, h: 0.3, fontSize: 14, bold: true, fontFace: 'Arial'
+});
+```
 
 **要包括的视觉元素：**
 - 所有部分标题旁边的装饰条（品牌颜色）
@@ -228,7 +275,51 @@ PptxGenJS 使用英寸。4:3 幻灯片 = **10" 宽 × 7.5" 高**。
 | 财务比较 | 柱状 |
 | 股价（1 年每日） | 线 |
 
-（图表代码示例保持与英文版本相同）
+### 图表代码示例
+
+**水平条形图（可放入 4:3 幻灯片的右下象限）：**
+```javascript
+slide.addChart(pptx.charts.BAR, [{
+  name: 'FY2024 Revenue by Region',
+  labels: ['North America', 'EMEA', 'China', 'APLA'],
+  values: [21.4, 13.6, 7.6, 6.7]
+}], {
+  x: 5.0, y: 4.1, w: 4.5, h: 3.0,  // 放入右下象限（4:3）
+  barDir: 'bar', chartColors: ['FF6B35'], showValue: true,
+  dataLabelFontSize: 10, catAxisLabelFontSize: 10, valAxisLabelFontSize: 10,
+  dataLabelFormatCode: '$#,##0.0B',
+  title: 'Revenue by Geography', titleFontSize: 12, titleBold: true
+});
+```
+
+**饼图（可放入 4:3 幻灯片的右下象限）：**
+```javascript
+slide.addChart(pptx.charts.PIE, [{
+  name: 'Product Mix',
+  labels: ['Footwear', 'Apparel', 'Equipment'],
+  values: [68, 29, 3]
+}], {
+  x: 5.0, y: 4.1, w: 4.5, h: 3.0,  // 放入右下象限（4:3）
+  showPercent: true, showLegend: true, legendPos: 'r',
+  dataLabelFontSize: 10, legendFontSize: 10,
+  chartColors: ['FF6B35', '2C2C2C', '4A4A4A'],
+  title: 'Revenue Mix FY24', titleFontSize: 12, titleBold: true
+});
+```
+
+**折线图（后续幻灯片全宽）：**
+```javascript
+slide.addChart(pptx.charts.LINE, [{
+  name: 'Revenue ($B)',
+  labels: ['FY21', 'FY22', 'FY23', 'FY24', 'FY25E'],
+  values: [44.5, 46.7, 48.5, 51.4, 54.2]
+}], {
+  x: 0.3, y: 1.2, w: 9.4, h: 5.5,  // 4:3 幻灯片全宽
+  chartColors: ['FF6B35'], showValue: true, lineSmooth: true,
+  dataLabelFontSize: 11, catAxisLabelFontSize: 11, valAxisLabelFontSize: 11,
+  title: 'Revenue Trend & Forecast', titleFontSize: 14, titleBold: true
+});
+```
 
 ---
 
